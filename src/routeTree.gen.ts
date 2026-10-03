@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AgbRouteImport } from './routes/agb'
+import { Route as AllergeneRouteImport } from './routes/allergene'
+import { Route as BestellungRouteImport } from './routes/bestellung'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as DatenschutzRouteImport } from './routes/datenschutz'
+import { Route as ImpressumRouteImport } from './routes/impressum'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgbRoute = AgbRouteImport.update({
+  id: '/agb',
+  path: '/agb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AllergeneRoute = AllergeneRouteImport.update({
+  id: '/allergene',
+  path: '/allergene',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BestellungRoute = BestellungRouteImport.update({
+  id: '/bestellung',
+  path: '/bestellung',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DatenschutzRoute = DatenschutzRouteImport.update({
+  id: '/datenschutz',
+  path: '/datenschutz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpressumRoute = ImpressumRouteImport.update({
+  id: '/impressum',
+  path: '/impressum',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agb': typeof AgbRoute
+  '/allergene': typeof AllergeneRoute
+  '/bestellung': typeof BestellungRoute
+  '/checkout': typeof CheckoutRoute
+  '/datenschutz': typeof DatenschutzRoute
+  '/impressum': typeof ImpressumRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agb': typeof AgbRoute
+  '/allergene': typeof AllergeneRoute
+  '/bestellung': typeof BestellungRoute
+  '/checkout': typeof CheckoutRoute
+  '/datenschutz': typeof DatenschutzRoute
+  '/impressum': typeof ImpressumRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agb': typeof AgbRoute
+  '/allergene': typeof AllergeneRoute
+  '/bestellung': typeof BestellungRoute
+  '/checkout': typeof CheckoutRoute
+  '/datenschutz': typeof DatenschutzRoute
+  '/impressum': typeof ImpressumRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/agb'
+    | '/allergene'
+    | '/bestellung'
+    | '/checkout'
+    | '/datenschutz'
+    | '/impressum'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/agb'
+    | '/allergene'
+    | '/bestellung'
+    | '/checkout'
+    | '/datenschutz'
+    | '/impressum'
+  id:
+    | '__root__'
+    | '/'
+    | '/agb'
+    | '/allergene'
+    | '/bestellung'
+    | '/checkout'
+    | '/datenschutz'
+    | '/impressum'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgbRoute: typeof AgbRoute
+  AllergeneRoute: typeof AllergeneRoute
+  BestellungRoute: typeof BestellungRoute
+  CheckoutRoute: typeof CheckoutRoute
+  DatenschutzRoute: typeof DatenschutzRoute
+  ImpressumRoute: typeof ImpressumRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agb': {
+      id: '/agb'
+      path: '/agb'
+      fullPath: '/agb'
+      preLoaderRoute: typeof AgbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/allergene': {
+      id: '/allergene'
+      path: '/allergene'
+      fullPath: '/allergene'
+      preLoaderRoute: typeof AllergeneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bestellung': {
+      id: '/bestellung'
+      path: '/bestellung'
+      fullPath: '/bestellung'
+      preLoaderRoute: typeof BestellungRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/datenschutz': {
+      id: '/datenschutz'
+      path: '/datenschutz'
+      fullPath: '/datenschutz'
+      preLoaderRoute: typeof DatenschutzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impressum': {
+      id: '/impressum'
+      path: '/impressum'
+      fullPath: '/impressum'
+      preLoaderRoute: typeof ImpressumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgbRoute: AgbRoute,
+  AllergeneRoute: AllergeneRoute,
+  BestellungRoute: BestellungRoute,
+  CheckoutRoute: CheckoutRoute,
+  DatenschutzRoute: DatenschutzRoute,
+  ImpressumRoute: ImpressumRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

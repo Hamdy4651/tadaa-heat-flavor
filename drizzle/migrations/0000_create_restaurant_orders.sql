@@ -1,0 +1,3 @@
+CREATE TABLE public.restaurant_orders (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), order_number text NOT NULL UNIQUE, items jsonb NOT NULL, customer jsonb NOT NULL, fulfillment text NOT NULL CHECK (fulfillment IN ('pickup','delivery','dinein')), subtotal_cents integer NOT NULL CHECK (subtotal_cents >= 0), discount_cents integer NOT NULL CHECK (discount_cents >= 0), delivery_fee_cents integer NOT NULL CHECK (delivery_fee_cents >= 0), total_cents integer NOT NULL CHECK (total_cents >= 0), status text NOT NULL DEFAULT 'received', payment_method text NOT NULL DEFAULT 'cash', created_at timestamptz NOT NULL DEFAULT now());
+GRANT ALL ON public.restaurant_orders TO service_role;
+ALTER TABLE public.restaurant_orders ENABLE ROW LEVEL SECURITY;
