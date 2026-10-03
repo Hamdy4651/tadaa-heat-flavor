@@ -10,9 +10,9 @@ import dough from '@/assets/dough-hands.jpg';
 import table from '@/assets/food-table.jpg';
 const imageFor = (item: Product) => item.image === 'pizza' ? pizza : item.image === 'doner' ? doner : table;
 export function useRestaurant() {
- const [lang,setLang] = useState<Language>('de'); const [fulfillment,setFulfillment] = useState<'pickup'|'delivery'|'dinein'>('pickup'); const [cart,setCart] = useState<CartItem[]>([]);
- useEffect(() => { try { const raw = localStorage.getItem('tadaabiss-cart'); if (raw) { const parsed = JSON.parse(raw); if (Array.isArray(parsed)) setCart(parsed.filter((i: CartItem) => i && menu.some(p => p.id === i.productId && p.price != null) && Number.isInteger(i.quantity) && i.quantity > 0)); } const stored = localStorage.getItem('tadaabiss-mode'); if (stored === 'pickup'||stored === 'delivery'||stored === 'dinein') setFulfillment(stored); const language = localStorage.getItem('tadaabiss-lang'); if (language === 'en') setLang('en'); } catch { /* ignore stale preferences */ } },[]);
- useEffect(() => { localStorage.setItem('tadaabiss-cart',JSON.stringify(cart)); },[cart]);
+ const [lang,setLang] = useState<Language>('de'); const [fulfillment,setFulfillment] = useState<'pickup'|'delivery'|'dinein'>('pickup'); const [cart,setCart] = useState<CartItem[]>([]); const [hydrated,setHydrated] = useState(false);
+ useEffect(() => { try { const raw = localStorage.getItem('tadaabiss-cart'); if (raw) { const parsed = JSON.parse(raw); if (Array.isArray(parsed)) setCart(parsed.filter((i: CartItem) => i && menu.some(p => p.id === i.productId && p.price != null) && Number.isInteger(i.quantity) && i.quantity > 0)); } const stored = localStorage.getItem('tadaabiss-mode'); if (stored === 'pickup'||stored === 'delivery'||stored === 'dinein') setFulfillment(stored); const language = localStorage.getItem('tadaabiss-lang'); if (language === 'en') setLang('en'); } catch { /* ignore stale preferences */ } finally { setHydrated(true); } },[]);
+ useEffect(() => { if (hydrated) localStorage.setItem('tadaabiss-cart',JSON.stringify(cart)); },[cart,hydrated]);
  useEffect(() => { localStorage.setItem('tadaabiss-mode',fulfillment); },[fulfillment]);
  useEffect(() => { localStorage.setItem('tadaabiss-lang',lang); },[lang]);
  const add = (item: CartItem) => setCart(previous => { const existing=previous.find(i => i.key === item.key); return existing ? previous.map(i=>i.key===item.key?{...i,quantity:i.quantity+item.quantity}:i) : [...previous,item] });
