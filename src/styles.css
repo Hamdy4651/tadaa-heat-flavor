@@ -54,3 +54,6 @@ html,body { overflow-x:clip } .ticker { clip-path:inset(-12px 0 -12px 0); }
 @media(max-width:640px){ .menu-toggle { padding:0; width:40px; } }
 @media(prefers-reduced-motion:reduce) { .burger-hero { height:calc(100svh - 86px) } .burger-visual { --assemble:1 } .burger-rule span { width:100% } }
 @media(max-width:640px) and (prefers-reduced-motion:reduce) { .burger-hero { height:calc(100svh - 68px) } }
+@media(max-width:900px) { .burger-visual { width:min(65vw,57svh); left:68%; top:53% } .burger-heading { width:50% } .burger-heading h1 { font-size:clamp(58px,8vw,92px) } }
+@media(max-width:640px) { .burger-visual { width:min(108vw,48svh); left:50%; top:56% } .burger-heading { width:88% } .burger-heading h1 { font-size:clamp(57px,15vw,90px) } }
+@media(max-width:640px) and (max-height:700px) { .burger-visual { width:min(95vw,52svh); top:59% } .burger-heading h1 { font-size:clamp(49px,12vw,70px) } }
