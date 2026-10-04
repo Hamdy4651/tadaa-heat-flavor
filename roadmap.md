@@ -1,0 +1,3 @@
+- [ ] Replace the split hero with a cinematic scroll-assembled burger scene.
+- [ ] Replace the fulfillment/status strip with a short promotional line.
+- [ ] Check desktop and mobile rendering and scrolling.
