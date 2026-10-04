@@ -13,17 +13,17 @@ body::before { content:""; position:fixed; inset:0; z-index:100; pointer-events:
 .burger-stage { position:sticky; top:86px; height:calc(100svh - 86px); min-height:520px; overflow:hidden; isolation:isolate; background:radial-gradient(ellipse 38% 53% at 51% 61%, color-mix(in oklab,var(--flame) 23%,var(--background)) 0%,var(--background) 100%); }
 .burger-stage::before { content:""; position:absolute; inset:0; z-index:0; opacity:.5; background:repeating-linear-gradient(90deg,transparent 0 149px,color-mix(in oklab,var(--border) 23%,transparent) 150px); mask-image:linear-gradient(to bottom,transparent,black 42%,transparent) }
 .burger-light { position:absolute; z-index:0; width:65%; height:90%; left:17.5%; top:15%; background:radial-gradient(ellipse at center,color-mix(in oklab,var(--flame) 34%,transparent),transparent 65%); filter:blur(38px); pointer-events:none }
-.burger-heading { position:absolute; z-index:2; left:max(5%,calc((100% - 1400px)/2)); top:clamp(40px,10vh,120px); width:min(50%,620px); pointer-events:none }
+.burger-heading { position:absolute; z-index:2; left:max(5%,calc((100% - 1400px)/2)); top:clamp(40px,10vh,120px); width:min(43%,550px); pointer-events:none }
 .burger-kicker { display:block; color:var(--primary); font-size:11px; font-weight:800; letter-spacing:.19em; margin-bottom:24px }
 .burger-heading h1 { font:clamp(72px,9vw,154px)/.81 var(--font-display); margin:0; letter-spacing:0; text-wrap:balance }
 .burger-heading em { font-style:normal; color:var(--primary); display:block }
-.burger-visual { position:absolute; z-index:1; width:clamp(380px,52vw,830px); aspect-ratio:2/3; left:53%; top:51%; transform:translate(-50%,-50%) scale(calc(.88 + .12 * var(--assemble))); filter:drop-shadow(0 36px 42px color-mix(in oklab,var(--background) 95%,transparent)); pointer-events:none }
+.burger-visual { position:absolute; z-index:1; width:min(52vw,68svh,830px); aspect-ratio:2/3; left:66%; top:52%; transform:translate(-50%,-50%) scale(calc(.88 + .12 * var(--assemble))); filter:drop-shadow(0 36px 42px color-mix(in oklab,var(--background) 95%,transparent)); pointer-events:none }
 .burger-layer { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; will-change:transform }
-.burger-layer-0 { clip-path:inset(0 0 70% 0); transform:translate3d(0,calc((1 - var(--assemble)) * -230px),0) rotate(calc((1 - var(--assemble)) * -7deg)) }
-.burger-layer-1 { clip-path:inset(30% 0 61% 0); transform:translate3d(calc((1 - var(--assemble)) * 115px),calc((1 - var(--assemble)) * -95px),0) }
-.burger-layer-2 { clip-path:inset(39% 0 46% 0); transform:translate3d(calc((1 - var(--assemble)) * -125px),calc((1 - var(--assemble)) * -24px),0) }
-.burger-layer-3 { clip-path:inset(54% 0 30% 0); transform:translate3d(calc((1 - var(--assemble)) * 135px),calc((1 - var(--assemble)) * 125px),0) }
-.burger-layer-4 { clip-path:inset(70% 0 0 0); transform:translate3d(0,calc((1 - var(--assemble)) * 230px),0) rotate(calc((1 - var(--assemble)) * 5deg)) }
+.burger-layer-0 { clip-path:inset(0 0 70% 0); transform:translate3d(0,calc((1 - var(--assemble)) * -145px),0) rotate(calc((1 - var(--assemble)) * -7deg)) }
+.burger-layer-1 { clip-path:inset(30% 0 61% 0); transform:translate3d(calc((1 - var(--assemble)) * 100px),calc((1 - var(--assemble)) * -70px),0) }
+.burger-layer-2 { clip-path:inset(39% 0 46% 0); transform:translate3d(calc((1 - var(--assemble)) * -105px),calc((1 - var(--assemble)) * -24px),0) }
+.burger-layer-3 { clip-path:inset(54% 0 30% 0); transform:translate3d(calc((1 - var(--assemble)) * 105px),calc((1 - var(--assemble)) * 80px),0) }
+.burger-layer-4 { clip-path:inset(70% 0 0 0); transform:translate3d(0,calc((1 - var(--assemble)) * 145px),0) rotate(calc((1 - var(--assemble)) * 5deg)) }
 .burger-bottom { position:absolute; z-index:3; inset:auto max(5%,calc((100% - 1400px)/2)) 6%; display:flex; align-items:end; justify-content:space-between; gap:24px }
 .burger-index,.burger-scroll { font-size:11px; font-weight:800; letter-spacing:.15em; color:var(--muted-foreground) }
 .burger-action { min-width:175px; box-shadow:0 14px 45px color-mix(in oklab,var(--flame) 35%,transparent) }
