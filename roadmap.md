@@ -1,4 +1,4 @@
-- [ ] Replace the burger with a cinematic scroll-animated pizza.
-- [ ] Remove the Tadaa-Menü section and redesign food cards with animation.
-- [ ] Upgrade the bottom basket and streamline checkout presentation.
-- [ ] Animate the promotional line on mobile and verify desktop/mobile ordering.
+- [x] Replace the burger with a cinematic scroll-animated pizza.
+- [x] Remove the Tadaa-Menü section and redesign food cards with animation.
+- [x] Upgrade the bottom basket and streamline checkout presentation.
+- [x] Animate the promotional line on mobile and verify adding, editing and proceeding to checkout on desktop/mobile.
