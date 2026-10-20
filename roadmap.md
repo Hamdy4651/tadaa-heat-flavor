@@ -1,3 +1,4 @@
-- [ ] Replace the split hero with a cinematic scroll-assembled burger scene.
-- [ ] Replace the fulfillment/status strip with a short promotional line.
-- [ ] Check desktop and mobile rendering and scrolling.
+- [ ] Replace the burger with a cinematic scroll-animated pizza.
+- [ ] Remove the Tadaa-Menü section and redesign food cards with animation.
+- [ ] Upgrade the bottom basket and streamline checkout presentation.
+- [ ] Animate the promotional line on mobile and verify desktop/mobile ordering.
