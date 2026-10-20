@@ -17,6 +17,10 @@ export const menu: Product[] = [
 export const money = (cents: number) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(cents / 100);
 export const categories: { id: Category; de: string; en: string }[] = [{id:'pizza',de:'Pizza & Co.',en:'Pizza & Co.'},{id:'doner',de:'Döner & Grill',en:'Kebab & Grill'},{id:'salads',de:'Salate',en:'Salads'},{id:'snacks',de:'Pommes & Snacks',en:'Fries & Snacks'},{id:'drinks',de:'Getränke',en:'Drinks'}];
 export type CartItem = { key: string; productId: string; quantity: number; sauce?: string; extra?: string; heat?: string; note?: string };
+export function defaultCartItem(product: Product): CartItem | null {
+ if (product.price == null) return null;
+ return { key: `${product.id}|Ohne Soße|Keine Extras|Normal|`, productId: product.id, quantity: 1, sauce: 'Ohne Soße', extra: 'Keine Extras', heat: 'Normal', note: '' };
+}
 export const EXTRA_PRICE = 150;
 export const DISCOUNT_PERCENT = 10;
 export const DELIVERY_FEE_CENTS = 0;
