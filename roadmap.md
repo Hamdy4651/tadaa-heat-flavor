@@ -2,3 +2,6 @@
 - [x] Remove the Tadaa-Menü section and redesign food cards with animation.
 - [x] Upgrade the bottom basket and streamline checkout presentation.
 - [x] Animate the promotional line on mobile and verify adding, editing and proceeding to checkout on desktop/mobile.
+- [x] Redesign product cards with a details face (description, sauces, extras, allergens) on hover/tap.
+- [x] Replace "02 / Feuer-Highlights" with a Best Seller showcase (ranked, animated).
+- [ ] Verify the new cards and Best Seller section on desktop and mobile.
