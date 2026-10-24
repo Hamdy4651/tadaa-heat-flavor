@@ -134,3 +134,42 @@ html,body { overflow-x:clip } .ticker { clip-path:inset(-12px 0 -12px 0); }
 @media(max-height:680px) and (max-width:640px) { .pizza-heading h1 { font-size:64px; } .pizza-visual { width:88%; left:50%; top:63%; } }
 @media(prefers-reduced-motion:reduce) { .pizza-hero { height:calc(100svh - 86px); } .pizza-stage { --assemble:1!important; --pizza-turn:0deg!important; } .promo-track { animation:none; } .promo-repeat:not(:first-child) { display:none; } .promo-repeat p { white-space:normal; } .promo-repeat { padding:20px; } }
 @media(max-width:640px) and (prefers-reduced-motion:reduce) { .pizza-hero { height:calc(100svh - 68px); } }
+
+/* === Detail-flip cards, best sellers and scroll reveal === */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--i,0)*80ms) }
+.reveal.revealed { opacity:1; transform:none }
+.premium-product { position:relative }
+.premium-product .product-shine { position:absolute; inset:0; z-index:2; background:linear-gradient(115deg,transparent 32%,color-mix(in oklab,var(--foreground) 16%,transparent) 50%,transparent 68%); transform:translateX(-130%); transition:transform .9s ease; pointer-events:none }
+.premium-product:hover .product-shine { transform:translateX(130%) }
+.product-flip { position:absolute; inset:0; z-index:5; display:flex; flex-direction:column; gap:10px; padding:20px; background:color-mix(in oklab,var(--background) 92%,transparent); backdrop-filter:blur(10px); opacity:0; pointer-events:none; transform:translateY(16px); transition:opacity .35s,transform .35s; overflow:auto }
+.premium-product:hover .product-flip, .premium-product.details-open .product-flip { opacity:1; transform:none; pointer-events:auto }
+.flip-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px }
+.flip-head h4 { margin:0; font:600 19px/1.2 var(--font-body) }
+.flip-price { font:700 16px var(--font-body); color:var(--primary); white-space:nowrap }
+.flip-desc { margin:0; color:var(--muted-foreground); font-size:12px; line-height:1.6 }
+.mini-options { display:grid; gap:8px; margin:4px 0 0 }
+.mini-options div { display:flex; justify-content:space-between; gap:12px; border-bottom:1px dashed var(--border); padding-bottom:7px; font-size:11px }
+.mini-options dt { font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--primary); white-space:nowrap }
+.mini-options dd { margin:0; color:var(--muted-foreground); text-align:right }
+.flip-allergens { margin:0; font-size:10px; color:var(--muted-foreground) }
+.flip-customize { margin-top:auto; height:46px; border-color:var(--primary); color:var(--primary); justify-content:center; font-weight:800 }
+.flip-customize:hover { background:var(--primary); color:var(--background) }
+.bestsellers { padding:110px 0; overflow:hidden; background:var(--card) }
+.bestsellers h2 { margin:12px 0 30px }
+.best-track { display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; padding:8px 0 26px; scrollbar-color:var(--primary) var(--card) }
+.best-card { scroll-snap-align:start; flex:0 0 min(430px,82vw); position:relative; border-radius:10px; overflow:hidden; background:var(--background); border:1px solid color-mix(in oklab,var(--border) 60%,transparent); transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s,opacity .8s; will-change:transform }
+.best-card:hover { transform:translateY(-8px) rotate(-1deg); box-shadow:var(--elevated-shadow) }
+.best-card img { width:100%; height:340px; object-fit:cover; transition:transform .8s cubic-bezier(.2,.8,.2,1) }
+.best-card:hover img { transform:scale(1.07) }
+.best-card::after { content:""; position:absolute; inset:0; background:linear-gradient(transparent 32%,var(--background) 94%); pointer-events:none }
+.best-rank { position:absolute; right:14px; top:-6px; z-index:2; font:112px/.9 var(--font-display); color:transparent; -webkit-text-stroke:2px color-mix(in oklab,var(--foreground) 55%,transparent); transition:-webkit-text-stroke-color .4s }
+.best-card:hover .best-rank { -webkit-text-stroke-color:var(--primary) }
+.best-tag { position:absolute; left:16px; top:16px; z-index:2; background:var(--flame); color:var(--foreground); padding:8px 12px; font:16px var(--font-display); transform:rotate(-3deg) }
+.best-copy { position:absolute; left:20px; right:20px; bottom:18px; z-index:2; display:flex; align-items:end; justify-content:space-between; gap:12px; flex-wrap:wrap }
+.best-copy h3 { flex:1; min-width:0; margin:0; font:700 24px/1.1 var(--font-body); overflow-wrap:anywhere }
+.best-actions { display:flex; align-items:center; gap:8px }
+.best-actions .price { font:700 18px var(--font-body); color:var(--primary); white-space:nowrap }
+.best-customize { width:44px; height:44px; border-radius:50%; border:1px solid var(--border); color:var(--foreground) }
+.best-note { font-size:11px; color:var(--muted-foreground) }
+@media(max-width:640px) { .bestsellers { padding:70px 0 } .best-card { flex-basis:min(330px,86vw) } .best-card img { height:300px } .best-rank { font-size:84px } .best-copy h3 { font-size:20px } .product-flip { position:static; inset:auto; display:none; padding:4px 4px 2px; overflow:visible; opacity:1; transform:none; pointer-events:auto; grid-column:1/-1; background:transparent; backdrop-filter:none } .premium-product.details-open .product-flip { display:flex; animation:rise .3s both } .mini-options div { font-size:10px } .flip-customize { margin-top:6px } }
+@media(prefers-reduced-motion:reduce) { .reveal { opacity:1; transform:none; transition:none } .best-card:hover { transform:none } .product-shine { display:none } }
