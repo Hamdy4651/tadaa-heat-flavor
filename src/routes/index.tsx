@@ -1,42 +1,650 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState, type CSSProperties } from 'react';
-import { Button } from '@/components/ui/button';
-import { Header, Footer, ProductSheet, CartSheet, useRestaurant } from '@/components/RestaurantApp';
-import { categories, menu, money, defaultCartItem, type Category, type Product } from '@/lib/menu';
-import logo from '@/assets/tadaabiss-logo.jpeg.asset.json';
-import pizza from '@/assets/pizza-fire.jpg';
-import doner from '@/assets/doner-fire.jpg';
-import dough from '@/assets/dough-hands.jpg';
-import table from '@/assets/food-table.jpg';
-import cinematicPizza from '@/assets/pizza-cinematic.png';
-import { ArrowUpRight, ShoppingBag, ChevronRight, Plus } from 'lucide-react';
-export const Route = createFileRoute('/')({ head:()=>({meta:[{title:'TadaaBiss – Pizza, Döner & Bowls in Münsingen'},{name:'description',content:'Pizza, Döner, Bowls und Street Food bei TadaaBiss am Marktplatz 12 in Münsingen. Speisekarte entdecken und online zur Abholung anfragen.'},{property:'og:title',content:'TadaaBiss – Pizza, Döner & Bowls in Münsingen'},{property:'og:description',content:'Frisch. Heiß. Lecker. Entdecke die Speisekarte von TadaaBiss in Münsingen.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}), component:Home });
-const visual=(p:Product)=>p.image==='pizza'?pizza:p.image==='doner'?doner:table;
-function Home(){
- const state=useRestaurant(); const [category,setCategory]=useState<Category>('pizza'); const [filter,setFilter]=useState(''); const [product,setProduct]=useState<Product|null>(null); const [cartOpen,setCartOpen]=useState(false); const [film,setFilm]=useState(0); const [pizzaProgress,setPizzaProgress]=useState(0); const [intro,setIntro]=useState(false); 
- useEffect(()=>{if(sessionStorage.getItem('tadaabiss-intro') || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;sessionStorage.setItem('tadaabiss-intro','1');setIntro(true);const timer=setTimeout(()=>setIntro(false),1150);return()=>clearTimeout(timer)},[]);
- useEffect(()=>{ const section=document.getElementById('film'); if(!section)return; const update=()=>{const rect=section.getBoundingClientRect(); const progress=Math.max(0,Math.min(1,-rect.top/Math.max(1,rect.height-window.innerHeight))); setFilm(Math.min(3,Math.floor(progress*4)));};window.addEventListener('scroll',update,{passive:true});update();return()=>window.removeEventListener('scroll',update)},[]);
- useEffect(()=>{const section=document.getElementById('pizza-hero'); if(!section)return; let frame=0; const update=()=>{cancelAnimationFrame(frame); frame=requestAnimationFrame(()=>{const rect=section.getBoundingClientRect(); const distance=Math.max(1,rect.height-window.innerHeight); setPizzaProgress(Math.max(0,Math.min(1,-rect.top/distance)));});}; window.addEventListener('scroll',update,{passive:true}); window.addEventListener('resize',update); update(); return()=>{cancelAnimationFrame(frame);window.removeEventListener('scroll',update);window.removeEventListener('resize',update)}},[]);
- const pizzaStyle={ '--assemble': .35 + .65 * Math.min(1,pizzaProgress*1.5), '--pizza-turn': `${-12 + 12*Math.min(1,pizzaProgress*1.5)}deg` } as CSSProperties;
- const quickAdd=(p:Product)=>{const item=defaultCartItem(p);if(item)state.add(item);};
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState, type CSSProperties } from "react";
+import { Button } from "@/components/ui/button";
+import { Header, Footer, CartSheet, ProductSheet, useRestaurant } from "@/components/RestaurantApp";
+import { categories, menu, money, defaultCartItem, type Category, type Product } from "@/lib/menu";
+import logo from "@/assets/tadaabiss-logo.jpg";
+import pizza from "@/assets/pizza-fire.jpg";
+import doner from "@/assets/doner-fire.jpg";
+import dough from "@/assets/dough-hands.jpg";
+import table from "@/assets/food-table.jpg";
+import cinematicPizza from "@/assets/pizza-cinematic.png";
+import { ArrowUpRight, ShoppingBag, ChevronRight, Plus } from "lucide-react";
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "TadaaBiss – Pizza, Döner & Bowls in Münsingen" },
+      {
+        name: "description",
+        content:
+          "Pizza, Döner, Bowls und Street Food bei TadaaBiss am Marktplatz 12 in Münsingen. Speisekarte entdecken und online zur Abholung anfragen.",
+      },
+      { property: "og:title", content: "TadaaBiss – Pizza, Döner & Bowls in Münsingen" },
+      {
+        property: "og:description",
+        content: "Frisch. Heiß. Lecker. Entdecke die Speisekarte von TadaaBiss in Münsingen.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Home,
+});
+const visual = (p: Product) => (p.image === "pizza" ? pizza : p.image === "doner" ? doner : table);
+function Home() {
+  const state = useRestaurant();
+  const [category, setCategory] = useState<Category>("pizza");
+  const [filter, setFilter] = useState("");
+  const [product, setProduct] = useState<Product | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [film, setFilm] = useState(0);
+  const [pizzaProgress, setPizzaProgress] = useState(0);
+  const [intro, setIntro] = useState(false);
+  useEffect(() => {
+    if (
+      sessionStorage.getItem("tadaabiss-intro") ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    sessionStorage.setItem("tadaabiss-intro", "1");
+    setIntro(true);
+    const timer = setTimeout(() => setIntro(false), 1150);
+    return () => clearTimeout(timer);
+  }, []);
+  useEffect(() => {
+    const section = document.getElementById("film");
+    if (!section) return;
+    const update = () => {
+      const rect = section.getBoundingClientRect();
+      const progress = Math.max(
+        0,
+        Math.min(1, -rect.top / Math.max(1, rect.height - window.innerHeight)),
+      );
+      setFilm(Math.min(3, Math.floor(progress * 4)));
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+  useEffect(() => {
+    const section = document.getElementById("pizza-hero");
+    if (!section) return;
+    let frame = 0;
+    const update = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        const distance = Math.max(1, rect.height - window.innerHeight);
+        setPizzaProgress(Math.max(0, Math.min(1, -rect.top / distance)));
+      });
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+  const pizzaStyle = {
+    "--assemble": 0.35 + 0.65 * Math.min(1, pizzaProgress * 1.5),
+    "--pizza-turn": `${-12 + 12 * Math.min(1, pizzaProgress * 1.5)}deg`,
+  } as CSSProperties;
+  const quickAdd = (p: Product) => {
+    const item = defaultCartItem(p);
+    if (item) state.add(item);
+  };
+  const openProduct = (p: Product) => setProduct(p);
 
- useEffect(()=>{const els=Array.from(document.querySelectorAll('.reveal'));const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px'});els.forEach(el=>io.observe(el));return()=>io.disconnect()},[]);
- const filtered=menu.filter(p=>p.category===category && (filter==='vegetarian'?p.vegetarian:filter==='spicy'?p.spicy:filter==='gluten'?p.allergens&&!p.allergens.includes('A'):filter==='milk'?p.allergens&&!p.allergens.includes('G'):true));
- return <><Header state={state} onCart={()=>setCartOpen(true)}/>{intro&&<div onClick={()=>setIntro(false)} role="button" tabIndex={0} aria-label="Intro überspringen" onKeyDown={e=>e.key==='Enter'&&setIntro(false)} style={{position:'fixed',inset:0,zIndex:90,background:'var(--background)',display:'grid',placeItems:'center',cursor:'pointer',animation:'sheet-up 1.1s reverse both'}}><img src={logo.url} alt="TadaaBiss" style={{width:'min(65vw,520px)',mixBlendMode:'screen'}}/></div>}
- <main><section className="pizza-hero" id="pizza-hero" aria-label="TadaaBiss Pizza"><div className="pizza-stage" style={pizzaStyle}><div className="pizza-heading"><span className="pizza-kicker">EAT · MEET · REPEAT</span><h1>TADAA<span>BISS.</span></h1><p>{state.lang==='de'?'Von Hand. Mit Feuer. Für dich.':'By hand. With fire. For you.'}</p></div><div className="pizza-visual" role="img" aria-label={state.lang==='de'?'Eine Pizza fügt sich beim Scrollen Stück für Stück zusammen':'Pizza slices come together as you scroll'}>{[0,1,2,3,4,5].map(i=><img key={i} className={`pizza-slice pizza-slice-${i}`} src={cinematicPizza} alt="" width="1536" height="1024" aria-hidden="true"/>)}</div><div className="pizza-bottom"><span className="pizza-origin">MÜNSINGEN <span>·</span> MARKTPLATZ 12</span><Button className="cta pizza-action" onClick={()=>document.getElementById('speisekarte')?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}>{state.t.menu}<ArrowUpRight size={19}/></Button><span className="pizza-scroll" aria-hidden="true">↓ &nbsp;{state.lang==='de'?'DER TADAA-MOMENT':'THE TADAA MOMENT'}</span></div><div className="pizza-rule" aria-hidden="true"><span/></div></div></section>
- <section className="promo-line" aria-label={state.lang==='de'?'Erst das Knistern. Dann das Tadaa.':'First the sizzle. Then the Tadaa.'}><div className="promo-track">{[0,1,2,3].map(i=><div className="promo-repeat" key={i} aria-hidden="true"><span className="promo-spark">✳</span><p>{state.lang==='de'?<>ERST DAS KNISTERN. <strong>DANN DAS TADAA.</strong></>:<>FIRST THE SIZZLE. <strong>THEN THE TADAA.</strong></>}</p></div>)}</div></section>
- <section className="film" id="film" aria-label={state.t.intro}><div className="film-stage"><img src={[dough,pizza,doner,table][film]} alt={['Hände formen frischen Teig','Pizza aus dem Ofen','Döner am Spieß','Frisch serviertes Essen'][film]} loading="lazy"/><div className="film-progress">{[0,1,2,3].map(i=><span key={i} className={film===i?'active':''}/>)}</div><div className="film-content"><span className="eyebrow">{state.t.intro}</span><h2 className="display">{['FRISCH','HEISS','KNUSPRIG','TADAA!'][film]}</h2><p>{['01 · Von Hand gemacht.','02 · Mit Feuer und Gefühl.','03 · Direkt vom Spieß.','04 · Jetzt bist du dran.'][film]}</p>{film===3&&<Button className="cta" onClick={()=>document.getElementById('speisekarte')?.scrollIntoView({behavior:'smooth'})}>{state.t.order} →</Button>}</div><span className="film-caption">EAT · MEET · REPEAT</span></div></section>
- <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0,1].map(i=><span key={i}>PIZZA · DÖNER · LAHMACUN · BOWLS · FALAFEL · SCHNITZEL · CALZONE · EAT · MEET · REPEAT ·&nbsp;</span>)}</div></div>
- <section className="menu-section section-wrap" id="speisekarte"><div className="section-heading reveal"><div><span className="eyebrow">01 / {state.t.menu}</span><h2 className="display">{state.t.menuTitle}</h2></div><p>{state.t.menuIntro}</p></div><div className="category-tabs" role="tablist" aria-label="Kategorien">{categories.map(c=><Button variant="ghost" role="tab" aria-selected={category===c.id} className={category===c.id?'active':''} key={c.id} onClick={()=>setCategory(c.id)}>{c[state.lang]}</Button>)}</div><div className="filter-row" role="group" aria-label="Filter">{[['gluten','ohne Gluten'],['milk','ohne Milch'],['vegetarian','vegetarisch'],['spicy','scharf']].map(([id,label])=><Button variant="ghost" className={filter===id?'selected':''} key={id} onClick={()=>setFilter(filter===id?'':id ?? '')}>{label}</Button>)}</div>{[...new Set(filtered.map(p=>p.group))].map(group=><div key={`${category}-${group}`}><h3 className="group-label">{group}</h3><div className="products">{filtered.filter(p=>p.group===group).map((p,i)=><article className="food-card" key={p.id} style={{animationDelay:`${Math.min(i,8)*40}ms`}}><div className="food-media"><img src={visual(p)} alt={`${p.name} – Beispielbild`} loading="lazy" width="1200" height="1008"/>{p.number&&<span className="food-number">Nº {p.number}</span>}<Button variant="ghost" className="food-fav" title={state.lang==='de'?'Anpassen':'Customize'} aria-label={`${p.name} ${state.lang==='de'?'anpassen':'customize'}`} onClick={e=>{e.stopPropagation();setProduct(p)}}><ArrowUpRight size={17}/></Button><span className="product-shine" aria-hidden="true"/></div><div className="food-body"><h4>{p.name}</h4><p className="food-desc">{p.description||state.t.heroNote}</p><div className="chips">{p.allergens?.map(a=><span className="chip" key={a}>{a}</span>)}{p.spicy&&<span className="chip spicy">♨ Scharf</span>}</div><div className="food-bottom"><span className="price">{p.price===null?state.t.unavailable:money(p.price)}</span><Button className="food-add" disabled={p.price===null} title={state.lang==='de'?'Direkt hinzufügen':'Quick add'} aria-label={`${p.name} ${state.lang==='de'?'direkt hinzufügen':'quick add'}`} onClick={e=>{e.stopPropagation();quickAdd(p)}}><span className="food-add-plus"><Plus size={15}/></span><span>{state.lang==='de'?'In den Warenkorb':'Add to basket'}</span></Button></div></div></article>)}</div></div>)}{filtered.length===0&&<p>Keine Gerichte für diesen Filter. Bitte einen anderen wählen.</p>}<p style={{fontSize:11,color:'var(--muted-foreground)',marginTop:22}}>Food-Fotos sind illustrative Beispielbilder. Zutaten und Allergene bitte vor Bestellung im Restaurant bestätigen.</p></section>
- <section className="bestsellers" id="bestseller"><div className="section-wrap"><div className="section-heading reveal"><div><span className="eyebrow">02 / Best Seller</span><h2 className="display">{state.lang==='de'?'Was alle bestellen.':'What everyone orders.'}</h2></div><p>{state.lang==='de'?'Die gefragtesten Gerichte – Beschreibung und Extras direkt auf der Karte.':'Our most requested dishes – description and extras right on the card.'}</p></div><div className="best-track">{[['doner-Döner & Lahmacun-01','BELIEBT'],['pizza-Pizzen 30 cm-07','SCHARF'],['doner-Bowls-11','FRISCH'],['pizza-Calzone-24','HERZHAFT'],['doner-Falafel & Halloumi-20','VEGGIE'],['doner-Sandwiches-17','CRISPY']].map(([id,tag],i)=>{const p=menu.find(m=>m.id===id);if(!p)return null;const rank=String(i+1).padStart(2,'0');return <article className="best-card reveal" key={id} style={{'--i':i} as CSSProperties}><img src={visual(p)} alt={`${p.name} – Beispielbild`} loading="lazy"/><span className="best-rank" aria-hidden="true">{rank}</span><span className="best-tag">{tag}</span><div className="best-copy"><h3>{p.name}</h3><div className="best-actions"><span className="price">{p.price===null?state.t.unavailable:money(p.price)}</span><Button variant="ghost" className="best-customize" aria-label={`${p.name} ${state.lang==='de'?'anpassen':'customize'}`} onClick={()=>setProduct(p)}><ArrowUpRight size={20}/></Button><Button className="plus-button" aria-label={`${p.name} ${state.lang==='de'?'direkt hinzufügen':'quick add'}`} onClick={()=>quickAdd(p)}><Plus size={20}/></Button></div></div></article>})}</div><p className="best-note">{state.lang==='de'?'Rangfolge nach unserer Speisekarte · Beispielbilder.':'Ranking follows our menu · illustrative images.'}</p></div></section>
- <section className="steps" id="so-gehts"><div className="section-wrap"><span className="eyebrow">03 / Ganz einfach</span><h2 className="display">{state.t.steps}</h2><div className="steps-row">{[[state.t.selected,'Pizza, Döner, Bowl? Klick rein und such dir was aus.'],[state.t.ordered,'Pack’s in den Warenkorb und gib deine Daten ein.'],[state.t.collect,'Hol’s bei uns ab oder frag nach Lieferung.']].map(([title,desc],i)=><div className="step" key={i}><span className="step-number">0{i+1}</span><h3>{title}</h3><p>{desc}</p></div>)}</div><p style={{marginTop:35,fontSize:13}}>Abholung, Lieferung oder direkt bei uns essen – du entscheidest.</p></div></section>
- <section className="about section-wrap" id="ueber-uns"><span className="eyebrow">04 / EAT · MEET · REPEAT</span>{[['EAT',dough,'Frisch zubereitet, heiß serviert. Pizza, Döner, Bowls, Schnitzel – alles unter einem Dach.'],['MEET',table,'Bei uns trifft man sich: Mittagessen, nach der Arbeit, Freunde, Familie.'],['REPEAT',pizza,'Du kommst wieder, weil es schmeckt. Und weil wir dich kennen.']].map(([word,img,text])=><div className="about-row" key={word}><img src={img} alt={`${word} bei TadaaBiss – illustrative Food-Fotografie`} loading="lazy"/><div><h3>{word}</h3><p>{text}</p></div></div>)}<p className="script thanks">Danke für deine Unterstützung! ♥</p></section>
- <section className="reviews"><div className="section-wrap"><span className="eyebrow">05 / Eure Stimmen</span><h2 className="display">{state.t.review}</h2><p>{state.t.reviewNote}</p></div></section>
- <section className="contact section-wrap" id="kontakt"><div><span className="eyebrow">06 / Münsingen</span><h2 className="display">{state.t.visit}</h2><p>Marktplatz 12<br/>72525 Münsingen</p><a href="tel:+4917660850594">↗ 0176 60850594</a><a href="tel:+4915219529649">↗ 01521 9529649</a><p>{state.t.closed}</p><a className="cta" href="https://www.google.com/maps/search/?api=1&query=Marktplatz+12%2C+72525+M%C3%BCnsingen" target="_blank" rel="noreferrer">Route ansehen ↗</a></div><iframe title="Karte zu TadaaBiss, Marktplatz 12 in Münsingen" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=9.46%2C48.39%2C9.52%2C48.43&layer=mapnik&marker=48.41%2C9.49"/></section></main><Footer/>
- {state.cart.length>0&&!cartOpen&&!product&&<div className="basket-dock"><div className="basket-dock-top"><span>TADAA<span className="text-glow">BISS</span></span><span>{state.t[state.fulfillment]} · {state.lang==='de'?'10 % Online-Rabatt':'10% online discount'}</span></div><Button className="basket-dock-button" onClick={()=>setCartOpen(true)}><span className="basket-count"><ShoppingBag size={19}/><b>{state.cart.reduce((n,i)=>n+i.quantity,0)}</b></span><span>{state.t.browse}</span><strong>{money(state.totals.total)}</strong><ChevronRight size={20}/></Button></div>}{product ? (
- <ProductSheet product={product} state={state} onClose={() => setProduct(null)} />
-) : null}
-{cartOpen ? (
- <CartSheet state={state} onClose={() => setCartOpen(false)} />
-) : null}</>;
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll(".reveal"));
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("revealed");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+  const filtered = menu.filter(
+    (p) =>
+      p.category === category &&
+      (filter === "vegetarian"
+        ? p.vegetarian
+        : filter === "spicy"
+          ? p.spicy
+          : filter === "gluten"
+            ? p.allergens && !p.allergens.includes("A")
+            : filter === "milk"
+              ? p.allergens && !p.allergens.includes("G")
+              : true),
+  );
+  return (
+    <>
+      <Header state={state} onCart={() => setCartOpen(true)} />
+      {intro && (
+        <div
+          onClick={() => setIntro(false)}
+          role="button"
+          tabIndex={0}
+          aria-label="Intro überspringen"
+          onKeyDown={(e) => e.key === "Enter" && setIntro(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 90,
+            background: "var(--background)",
+            display: "grid",
+            placeItems: "center",
+            cursor: "pointer",
+            animation: "sheet-up 1.1s reverse both",
+          }}
+        >
+          <img
+            src={logo}
+            alt="TadaaBiss"
+            style={{
+              width: "min(65vw,520px)",
+              aspectRatio: "1.85 / 1",
+              objectFit: "cover",
+              mixBlendMode: "screen",
+            }}
+          />
+        </div>
+      )}
+      <main>
+        <section className="pizza-hero" id="pizza-hero" aria-label="TadaaBiss Pizza">
+          <div className="pizza-stage" style={pizzaStyle}>
+            <img className="pizza-hero-backdrop" src={pizza} alt="" aria-hidden="true" />
+            <div className="pizza-heading">
+              <span className="pizza-kicker">
+                {state.lang === "de"
+                  ? "MÜNSINGEN · AUS LIEBE ZUM GESCHMACK"
+                  : "MÜNSINGEN · MADE FOR THE LOVE OF FLAVOR"}
+              </span>
+              <h1>
+                TADAA<span>BISS.</span>
+              </h1>
+              <p>
+                {state.lang === "de"
+                  ? "Handgemacht. Feuergeküsst. Unvergesslich."
+                  : "Handcrafted. Fire-kissed. Unforgettable."}
+              </p>
+              <span className="pizza-heading-note">
+                {state.lang === "de" ? "PIZZA · DÖNER · BOWLS" : "PIZZA · KEBAB · BOWLS"}
+              </span>
+            </div>
+            <div
+              className="pizza-visual"
+              role="img"
+              aria-label={
+                state.lang === "de"
+                  ? "Eine Pizza fügt sich beim Scrollen Stück für Stück zusammen"
+                  : "Pizza slices come together as you scroll"
+              }
+            >
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <img
+                  key={i}
+                  className={`pizza-slice pizza-slice-${i}`}
+                  src={cinematicPizza}
+                  alt=""
+                  width="1536"
+                  height="1024"
+                  aria-hidden="true"
+                />
+              ))}
+            </div>
+            <div className="pizza-bottom">
+              <span className="pizza-origin">
+                MÜNSINGEN <span>·</span> MARKTPLATZ 12
+              </span>
+              <Button
+                className="cta pizza-action"
+                onClick={() =>
+                  document.getElementById("speisekarte")?.scrollIntoView({
+                    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                      ? "auto"
+                      : "smooth",
+                  })
+                }
+              >
+                {state.t.menu}
+                <ArrowUpRight size={19} />
+              </Button>
+              <span className="pizza-scroll" aria-hidden="true">
+                ↓ &nbsp;{state.lang === "de" ? "DER TADAA-MOMENT" : "THE TADAA MOMENT"}
+              </span>
+            </div>
+            <div className="pizza-rule" aria-hidden="true">
+              <span />
+            </div>
+          </div>
+        </section>
+        <section
+          className="promo-line"
+          aria-label={
+            state.lang === "de"
+              ? "Erst das Knistern. Dann das Tadaa."
+              : "First the sizzle. Then the Tadaa."
+          }
+        >
+          <div className="promo-track">
+            {[0, 1, 2, 3].map((i) => (
+              <div className="promo-repeat" key={i} aria-hidden="true">
+                <span className="promo-spark">✳</span>
+                <p>
+                  {state.lang === "de" ? (
+                    <>
+                      ERST DAS KNISTERN. <strong>DANN DAS TADAA.</strong>
+                    </>
+                  ) : (
+                    <>
+                      FIRST THE SIZZLE. <strong>THEN THE TADAA.</strong>
+                    </>
+                  )}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="film" id="film" aria-label={state.t.intro}>
+          <div className="film-stage">
+            <img
+              src={[dough, pizza, doner, table][film]}
+              alt={
+                [
+                  "Hände formen frischen Teig",
+                  "Pizza aus dem Ofen",
+                  "Döner am Spieß",
+                  "Frisch serviertes Essen",
+                ][film]
+              }
+              loading="lazy"
+            />
+            <div className="film-progress">
+              {[0, 1, 2, 3].map((i) => (
+                <span key={i} className={film === i ? "active" : ""} />
+              ))}
+            </div>
+            <div className="film-content">
+              <span className="eyebrow">{state.t.intro}</span>
+              <h2 className="display">{["FRISCH", "HEISS", "KNUSPRIG", "TADAA!"][film]}</h2>
+              <p>
+                {
+                  [
+                    "01 · Von Hand gemacht.",
+                    "02 · Mit Feuer und Gefühl.",
+                    "03 · Direkt vom Spieß.",
+                    "04 · Jetzt bist du dran.",
+                  ][film]
+                }
+              </p>
+              {film === 3 && (
+                <Button
+                  className="cta"
+                  onClick={() =>
+                    document.getElementById("speisekarte")?.scrollIntoView({ behavior: "smooth" })
+                  }
+                >
+                  {state.t.order} →
+                </Button>
+              )}
+            </div>
+            <span className="film-caption">EAT · MEET · REPEAT</span>
+          </div>
+        </section>
+        <div className="ticker" aria-hidden="true">
+          <div className="ticker-track">
+            {[0, 1].map((i) => (
+              <span key={i}>
+                PIZZA · DÖNER · LAHMACUN · BOWLS · FALAFEL · SCHNITZEL · CALZONE · EAT · MEET ·
+                REPEAT ·&nbsp;
+              </span>
+            ))}
+          </div>
+        </div>
+        <section className="menu-section section-wrap" id="speisekarte">
+          <div className="section-heading reveal">
+            <div>
+              <span className="eyebrow">01 / {state.t.menu}</span>
+              <h2 className="display">{state.t.menuTitle}</h2>
+            </div>
+            <p>{state.t.menuIntro}</p>
+          </div>
+          <div className="category-tabs" role="tablist" aria-label="Kategorien">
+            {categories.map((c) => (
+              <Button
+                variant="ghost "
+                role="tab"
+                aria-selected={category === c.id}
+                className={category === c.id ? "active" : ""}
+                key={c.id}
+                onClick={() => setCategory(c.id)}
+              >
+                {c[state.lang]}
+              </Button>
+            ))}
+          </div>
+          <div className="filter-row" role="group" aria-label="Filter">
+            {[
+              ["gluten", "ohne Gluten"],
+              ["milk", "ohne Milch"],
+              ["vegetarian", "vegetarisch"],
+              ["spicy", "scharf"],
+            ].map(([id, label]) => (
+              <Button
+                variant="ghost"
+                className={filter === id ? "selected" : ""}
+                key={id}
+                onClick={() => setFilter(filter === id ? "" : (id ?? ""))}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+          {[...new Set(filtered.map((p) => p.group))].map((group) => (
+            <div key={`${category}-${group}`}>
+              <h3 className="group-label">{group}</h3>
+              <div className="products">
+                {filtered
+                  .filter((p) => p.group === group)
+                  .map((p, i) => (
+                    <article
+                      className="food-card"
+                      key={p.id}
+                      role="link"
+                      tabIndex={0}
+                      aria-label={`${p.name} – ${state.lang === "de" ? "Details ansehen" : "view details"}`}
+                      onClick={() => openProduct(p)}
+                      onKeyDown={(e) => {
+                        if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+                          e.preventDefault();
+                          openProduct(p);
+                        }
+                      }}
+                      style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
+                    >
+                      <div className="food-media">
+                        <img
+                          src={visual(p)}
+                          alt={`${p.name} – Beispielbild`}
+                          loading="lazy"
+                          width="1200"
+                          height="1008"
+                        />
+                        {p.number && <span className="food-number">Nº {p.number}</span>}
+                        <Button
+                          variant="ghost"
+                          className="food-fav"
+                          title={state.lang === "de" ? "Anpassen" : "Customize"}
+                          aria-label={`${p.name} ${state.lang === "de" ? "anpassen" : "customize"}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openProduct(p);
+                          }}
+                        >
+                          <ArrowUpRight size={17} />
+                        </Button>
+                        <span className="product-shine" aria-hidden="true" />
+                      </div>
+                      <div className="food-body">
+                        <h4>{p.name}</h4>
+                        <p className="food-desc">{p.description || state.t.heroNote}</p>
+                        <div className="chips">
+                          {p.allergens?.map((a) => (
+                            <span className="chip" key={a}>
+                              {a}
+                            </span>
+                          ))}
+                          {p.spicy && <span className="chip spicy">♨ Scharf</span>}
+                        </div>
+                        <div className="food-bottom">
+                          <span className="price">
+                            {p.price === null ? state.t.unavailable : money(p.price)}
+                          </span>
+                          <Button
+                            className="food-add"
+                            disabled={p.price === null}
+                            title={state.lang === "de" ? "Direkt hinzufügen" : "Quick add"}
+                            aria-label={`${p.name} ${state.lang === "de" ? "direkt hinzufügen" : "quick add"}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              quickAdd(p);
+                            }}
+                          >
+                            <span className="food-add-plus">
+                              <Plus size={15} />
+                            </span>
+                            <span>
+                              {state.lang === "de" ? "In den Warenkorb" : "Add to basket"}
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+              </div>
+            </div>
+          ))}
+          {filtered.length === 0 && (
+            <p>Keine Gerichte für diesen Filter. Bitte einen anderen wählen.</p>
+          )}
+          <p style={{ fontSize: 11, color: "var(--muted-foreground)", marginTop: 22 }}>
+            Food-Fotos sind illustrative Beispielbilder. Zutaten und Allergene bitte vor Bestellung
+            im Restaurant bestätigen.
+          </p>
+        </section>
+        <section className="bestsellers" id="bestseller">
+          <div className="section-wrap">
+            <div className="section-heading reveal">
+              <div>
+                <span className="eyebrow">02 / Best Seller</span>
+                <h2 className="display">
+                  {state.lang === "de" ? "Was alle bestellen." : "What everyone orders."}
+                </h2>
+              </div>
+              <p>
+                {state.lang === "de"
+                  ? "Die gefragtesten Gerichte – Beschreibung und Extras direkt auf der Karte."
+                  : "Our most requested dishes – description and extras right on the card."}
+              </p>
+            </div>
+            <div className="best-track">
+              {[
+                ["doner-Döner & Lahmacun-01", "BELIEBT"],
+                ["pizza-Pizzen 30 cm-07", "SCHARF"],
+                ["doner-Bowls-11", "FRISCH"],
+                ["pizza-Calzone-24", "HERZHAFT"],
+                ["doner-Falafel & Halloumi-20", "VEGGIE"],
+                ["doner-Sandwiches-17", "CRISPY"],
+              ].map(([id, tag], i) => {
+                const p = menu.find((m) => m.id === id);
+                if (!p) return null;
+                const rank = String(i + 1).padStart(2, "0");
+                return (
+                  <article
+                    className="best-card reveal"
+                    key={id}
+                    style={{ "--i": i } as CSSProperties}
+                    tabIndex={0}
+                    role="link"
+                    onClick={() => openProduct(p)}
+                    onKeyDown={(event) => {
+                      if (
+                        event.target === event.currentTarget &&
+                        (event.key === "Enter" || event.key === " ")
+                      ) {
+                        event.preventDefault();
+                        openProduct(p);
+                      }
+                    }}
+                  >
+                    <img src={visual(p)} alt={`${p.name} – Beispielbild`} loading="lazy" />
+                    <span className="best-rank" aria-hidden="true">
+                      {rank}
+                    </span>
+                    <span className="best-tag">{tag}</span>
+                    <div className="best-copy">
+                      <h3>{p.name}</h3>
+                      <div className="best-actions">
+                        <span className="price">
+                          {p.price === null ? state.t.unavailable : money(p.price)}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          className="best-customize"
+                          aria-label={`${p.name} ${state.lang === "de" ? "anpassen" : "customize"}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openProduct(p);
+                          }}
+                        >
+                          <ArrowUpRight size={20} />
+                        </Button>
+                        <Button
+                          className="plus-button"
+                          aria-label={`${p.name} ${state.lang === "de" ? "direkt hinzufügen" : "quick add"}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            quickAdd(p);
+                          }}
+                        >
+                          <Plus size={20} />
+                        </Button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+            <p className="best-note">
+              {state.lang === "de"
+                ? "Rangfolge nach unserer Speisekarte · Beispielbilder."
+                : "Ranking follows our menu · illustrative images."}
+            </p>
+          </div>
+        </section>
+        <section className="steps" id="so-gehts">
+          <div className="section-wrap">
+            <span className="eyebrow">03 / Ganz einfach</span>
+            <h2 className="display">{state.t.steps}</h2>
+            <div className="steps-row">
+              {[
+                [state.t.selected, "Pizza, Döner, Bowl? Klick rein und such dir was aus."],
+                [state.t.ordered, "Pack’s in den Warenkorb und gib deine Daten ein."],
+                [state.t.collect, "Hol’s bei uns ab oder frag nach Lieferung."],
+              ].map(([title, desc], i) => (
+                <div className="step" key={i}>
+                  <span className="step-number">0{i + 1}</span>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                </div>
+              ))}
+            </div>
+            <p style={{ marginTop: 35, fontSize: 13 }}>
+              Abholung, Lieferung oder direkt bei uns essen – du entscheidest.
+            </p>
+          </div>
+        </section>
+        <section className="about section-wrap" id="ueber-uns">
+          <span className="eyebrow">04 / EAT · MEET · REPEAT</span>
+          {[
+            [
+              "EAT",
+              dough,
+              "Frisch zubereitet, heiß serviert. Pizza, Döner, Bowls, Schnitzel – alles unter einem Dach.",
+            ],
+            [
+              "MEET",
+              table,
+              "Bei uns trifft man sich: Mittagessen, nach der Arbeit, Freunde, Familie.",
+            ],
+            ["REPEAT", pizza, "Du kommst wieder, weil es schmeckt. Und weil wir dich kennen."],
+          ].map(([word, img, text]) => (
+            <div className="about-row" key={word}>
+              <img
+                src={img}
+                alt={`${word} bei TadaaBiss – illustrative Food-Fotografie`}
+                loading="lazy"
+              />
+              <div>
+                <h3>{word}</h3>
+                <p>{text}</p>
+              </div>
+            </div>
+          ))}
+          <p className="script thanks">Danke für deine Unterstützung! ♥</p>
+        </section>
+        <section className="reviews">
+          <div className="section-wrap">
+            <span className="eyebrow">05 / Eure Stimmen</span>
+            <h2 className="display">{state.t.review}</h2>
+            <p>{state.t.reviewNote}</p>
+          </div>
+        </section>
+        <section className="contact section-wrap" id="kontakt">
+          <div>
+            <span className="eyebrow">06 / Münsingen</span>
+            <h2 className="display">{state.t.visit}</h2>
+            <p>
+              Marktplatz 12
+              <br />
+              72525 Münsingen
+            </p>
+            <a href="tel:+4917660850594">↗ 0176 60850594</a>
+            <a href="tel:+4915219529649">↗ 01521 9529649</a>
+            <p>{state.t.closed}</p>
+            <a
+              className="cta"
+              href="https://www.google.com/maps/search/?api=1&query=Marktplatz+12%2C+72525+M%C3%BCnsingen"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Route ansehen ↗
+            </a>
+          </div>
+          <iframe
+            title="Karte zu TadaaBiss, Marktplatz 12 in Münsingen"
+            loading="lazy"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=9.46%2C48.39%2C9.52%2C48.43&layer=mapnik&marker=48.41%2C9.49"
+          />
+        </section>
+      </main>
+      <Footer />
+      {state.cart.length > 0 && !cartOpen && !product && (
+        <div className="basket-dock">
+          <div className="basket-dock-top">
+            <span>
+              TADAA<span className="text-glow">BISS</span>
+            </span>
+            <span>
+              {state.t[state.fulfillment]} ·{" "}
+              {state.lang === "de" ? "10 % Online-Rabatt" : "10% online discount"}
+            </span>
+          </div>
+          <Button className="basket-dock-button" onClick={() => setCartOpen(true)}>
+            <span className="basket-count">
+              <ShoppingBag size={19} />
+              <b>{state.cart.reduce((n, i) => n + i.quantity, 0)}</b>
+            </span>
+            <span>{state.t.browse}</span>
+            <strong>{money(state.totals.total)}</strong>
+            <ChevronRight size={20} />
+          </Button>
+        </div>
+      )}
+      {product ? (
+        <ProductSheet product={product} state={state} onClose={() => setProduct(null)} />
+      ) : null}
+      {cartOpen ? <CartSheet state={state} onClose={() => setCartOpen(false)} /> : null}
+    </>
+  );
 }

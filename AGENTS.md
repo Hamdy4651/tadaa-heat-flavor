@@ -10,6 +10,6 @@
 <!-- LOVABLE:END -->
 
 - Keep menu prices, discounts, and catalog data static in `src/lib/menu.ts`; recalculate checkout totals in the server function.
-- Do not connect a database or persist customer/order data. Checkout is a local demo only; clearly state that demo orders are not sent to the restaurant.
+- Do not connect a database or persist submitted customer details or real order inquiries. Checkout is a local demo only; clearly state that demo orders are not sent to the restaurant.
 - Keep product and cart overlays as bottom sheets rather than centered dialogs, matching the restaurant's mobile ordering flow.
 - Scope the light ordering-surface tokens to bottom sheets and the basket dock so menu pages retain the restaurant theme while ordering controls stay high-contrast.
